@@ -81,7 +81,11 @@
              (v   (interpolate v0   v1   δz)))
         v))))
 
-(defun value-noise (x y z octaves seed)
+(defun value-noise (x y z &key (octaves 5) (seed 1))
+  "Generate value noise in the range [0, 1]. @c(x), @c(y) and @c(z)
+must be non-negative @c(single-float) values. @c(octaves) specifies
+the number of high-frequency components in the noise. @c(seed) is used
+to generate a unique examplar of noise."
   (declare (type (single-float 0f0) x y z)
            (type non-negative-fixnum seed)
            (type octave octaves))

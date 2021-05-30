@@ -1,0 +1,22 @@
+@begin[ref=index](section)
+    @title(API)
+    @b(cl-value-noise) has the only function @c(value-noise:value-noise) to
+    generate one-, two- or three-dimensional value noise.
+
+    @cl:with-package[name="cl-value-noise"](
+        @cl:doc(function value-noise)
+    )
+@end(section)
+
+@begin(section)
+    @title(Examples)
+    Here are two 500x500 images generated with this library.
+    @begin(figure)
+      This image is generated using the formula @c((value-noise x/100 y/100 0 5 324)).
+      @image[src=image1.jpg]()
+    @end(figure)
+    @begin(figure)
+      This image is generated using the formula @c((value-noise x/200 y/200 0 10 124)).
+      @image[src=image2.jpg]()
+    @end(figure)
+@end(section)
