@@ -22,7 +22,7 @@ jobs:
           path: ~/lisp/docparser
       - name: Install dependencies
         run: |
-          sudo apt-get install info install-info
+          sudo apt-get install info install-info libturbojpeg0-dev
       - name: Install CIM
         run: |
           curl -L https://raw.githubusercontent.com/shamazmazum/cl-cirrus/github-actions/install-actions.sh | sh
