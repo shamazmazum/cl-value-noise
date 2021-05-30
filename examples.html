@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+  Examples &ndash; cl-value-noise
+</title>
+    <link rel="stylesheet" href="static/style.css"/>
+    
+  <link rel="stylesheet" href="static/highlight.css"/>
+  <script src="static/highlight.js"></script>
+  <style>
+   /* Highlight the current top-level TOC item, and hide the TOC of all other items */
+
+   .toc a[data-node="examples"] {
+       color: #AD3108;
+   }
+
+   .toc ol {
+       display: none;
+   }
+
+   .toc > ol {
+       display: block;
+   }
+
+   .toc li a[data-node="examples"] + ol {
+       display: block;
+   }
+
+   .toc li a[data-node="examples"] + ol li {
+       font-size: 16px;
+       margin: 0 10px;
+   }
+
+   .toc li a[active] + ol li:first-child {
+       margin-top: 5px;
+   }
+  </style>
+
+  </head>
+  <body>
+    
+  <h1 class="doc-title">cl-value-noise » Examples</h1>
+  <article id="article" data-section="examples">
+    <aside>
+      <ol class="toc"><li><a href="index.html" data-node="index">API</a></li><li><a href="examples.html" data-node="examples">Examples</a></li></ol>
+    </aside>
+    <main class="codex-section">
+      
+    Here are two 500x500 images generated with this library.
+    <figure><img src="image1.jpg"/><figcaption>      This image is generated using the formula <code>(value-noise x/100 y/100 0 5 324)</code>.
+      
+    </figcaption></figure>
+    <figure><img src="image2.jpg"/><figcaption>      This image is generated using the formula <code>(value-noise x/200 y/200 0 10 124)</code>.
+      
+    </figcaption></figure>
+
+    </main>
+  </article>
+  <footer>
+    <div class="info">
+      Created with <a href="https://github.com/CommonDoc/codex">Codex</a>.
+    </div>
+  </footer>
+  <script>
+   HighlightLisp.highlight_auto();
+  </script>
+
+  </body>
+</html>
