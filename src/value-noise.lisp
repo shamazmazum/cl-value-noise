@@ -25,26 +25,16 @@
   (+ v1 (* x (- v2 v1))))
 
 (defmacro quotient-remainder (bindings &body body)
-  (labels
-      ((accumulate-bindings (bindings accum inner-body)
-         (if bindings
-             (destructuring-bind (binding . rest)
-                 bindings
-               (destructuring-bind (quotient remainder number divisor)
-                   binding
-                 (let ((binding-form
-                         (if inner-body
-                             `(multiple-value-bind (,quotient ,remainder)
-                                  (floor ,number ,divisor)
-                                (declare (type fixnum ,quotient))
-                                ,@accum)
-                             `(multiple-value-bind (,quotient ,remainder)
-                                  (floor ,number ,divisor)
-                                (declare (type fixnum ,quotient))
-                                ,accum))))
-                   (accumulate-bindings rest binding-form nil))))
-             accum)))
-    (accumulate-bindings bindings body t)))
+  (flet ((make-binding (binding forms)
+           (destructuring-bind (quotient remainder number divisor)
+               binding
+             `(multiple-value-bind (,quotient ,remainder)
+                  (floor ,number ,divisor)
+                (declare (type fixnum ,quotient))
+                ,forms))))
+    (reduce #'make-binding bindings
+            :from-end t
+            :initial-value `(progn ,@body))))
 
 (defun octave-noise (x y z octave seed)
   (declare (type single-float x y z)
