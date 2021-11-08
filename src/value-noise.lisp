@@ -1,7 +1,6 @@
 (in-package :value-noise)
 
 (declaim (optimize (speed 3)))
-(deftype non-negative-fixnum () '(integer 0 #.most-positive-fixnum))
 (deftype octave () '(integer 0 20))
 
 (declaim (inline round32))
@@ -10,7 +9,7 @@
 ;; I am not good at RNGs, this can be improved by a skilled person
 (declaim (inline lolrng))
 (defun lolrng (x y z seed)
-  (declare (type non-negative-fixnum x y z seed))
+  (declare (type fixnum x y z seed))
   (let* ((r1 (round32 (* x #x1b873593)))
          (r2 (round32 (* y #x19088711)))
          (r3 (round32 (* z #xb2d05e13)))
@@ -48,8 +47,8 @@
     (accumulate-bindings bindings body t)))
 
 (defun octave-noise (x y z octave seed)
-  (declare (type (single-float 0f0) x y z)
-           (type non-negative-fixnum seed)
+  (declare (type single-float x y z)
+           (type fixnum seed)
            (type octave octave))
   (let ((divisor #+nil (expt 2.0 (- octave))
                  (float (/ (ash 1 octave)))))
@@ -86,8 +85,8 @@
 must be non-negative @c(single-float) values. @c(octaves) specifies
 the number of high-frequency components in the noise. @c(seed) is used
 to generate a unique examplar of noise."
-  (declare (type (single-float 0f0) x y z)
-           (type non-negative-fixnum seed)
+  (declare (type single-float x y z)
+           (type fixnum seed)
            (type octave octaves))
   (loop for octave fixnum below octaves
         for noise single-float = (octave-noise x y z octave seed)
