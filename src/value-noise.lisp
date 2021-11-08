@@ -26,12 +26,16 @@
 
 (defmacro quotient-remainder (bindings &body body)
   (flet ((make-binding (binding forms)
-           (destructuring-bind (quotient remainder number divisor)
-               binding
-             `(multiple-value-bind (,quotient ,remainder)
-                  (floor ,number ,divisor)
-                (declare (type fixnum ,quotient))
-                ,forms))))
+           (let ((result (gensym)))
+             (destructuring-bind (whole fraction number divisor)
+                 binding
+               `(let ((,result (/ ,number ,divisor)))
+                  (declare (type (single-float #.(float most-negative-fixnum)
+                                               #.(float most-positive-fixnum))
+                                 ,result))
+                  (multiple-value-bind (,whole ,fraction)
+                      (floor ,result)
+                    ,forms))))))
     (reduce #'make-binding bindings
             :from-end t
             :initial-value `(progn ,@body))))
@@ -42,14 +46,10 @@
            (type octave octave))
   (let ((divisor #+nil (expt 2.0 (- octave))
                  (float (/ (ash 1 octave)))))
-    (quotient-remainder ((qx rx x divisor)
-                         (qy ry y divisor)
-                         (qz rz z divisor))
-      (let* ((δx (/ rx divisor))
-             (δy (/ ry divisor))
-             (δz (/ rz divisor))
-
-             (v000 (lolrng (+ qx 0) (+ qy 0) (+ qz 0) seed))
+    (quotient-remainder ((qx δx x divisor)
+                         (qy δy y divisor)
+                         (qz δz z divisor))
+      (let* ((v000 (lolrng (+ qx 0) (+ qy 0) (+ qz 0) seed))
              (v001 (lolrng (+ qx 1) (+ qy 0) (+ qz 0) seed))
              (v010 (lolrng (+ qx 0) (+ qy 1) (+ qz 0) seed))
              (v011 (lolrng (+ qx 1) (+ qy 1) (+ qz 0) seed))
