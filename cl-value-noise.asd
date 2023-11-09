@@ -6,6 +6,7 @@
   :licence "2-clause BSD"
   :pathname "src/"
   :serial t
+  :depends-on (:serapeum)
   :components ((:file "package")
                (:file "value-noise")))
 

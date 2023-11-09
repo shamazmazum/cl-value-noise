@@ -8,8 +8,9 @@
 
 ;; I am not good at RNGs, this can be improved by a skilled person
 (declaim (inline lolrng))
+(sera:-> lolrng (fixnum fixnum fixnum fixnum)
+         (values (single-float 0.0 1.0) &optional))
 (defun lolrng (x y z seed)
-  (declare (type fixnum x y z seed))
   (let* ((r1 (round32 (* x #x1b873593)))
          (r2 (round32 (* y #x19088711)))
          (r3 (round32 (* z #xb2d05e13)))
@@ -20,6 +21,8 @@
      #.(float #xffffffff))))
 
 (declaim (inline interpolate))
+(sera:-> interpolate (single-float single-float single-float)
+         (values single-float &optional))
 (defun interpolate (v1 v2 x)
   (declare (type single-float v1 v2 x))
   (+ v1 (* x (- v2 v1))))
@@ -40,10 +43,12 @@
             :from-end t
             :initial-value `(progn ,@body))))
 
+(sera:-> octave-noise (single-float
+                       single-float
+                       single-float
+                       octave fixnum)
+         (values (single-float 0.0 1.0) &optional))
 (defun octave-noise (x y z octave seed)
-  (declare (type single-float x y z)
-           (type fixnum seed)
-           (type octave octave))
   (let ((divisor #+nil (expt 2.0 (- octave))
                  (float (/ (ash 1 octave)))))
     (quotient-remainder ((qx δx x divisor)
@@ -70,14 +75,16 @@
              (v   (interpolate v0   v1   δz)))
         v))))
 
+(sera:-> value-noise (single-float
+                      single-float
+                      single-float
+                      &key (:octaves octave) (:seed fixnum))
+         (values (single-float 0.0 1.0) &optional))
 (defun value-noise (x y z &key (octaves 5) (seed 1))
   "Generate value noise in the range [0, 1]. @c(x), @c(y) and @c(z)
 must be non-negative @c(single-float) values. @c(octaves) specifies
 the number of high-frequency components in the noise. @c(seed) is used
 to generate a unique examplar of noise."
-  (declare (type single-float x y z)
-           (type fixnum seed)
-           (type octave octaves))
   (loop for octave fixnum below octaves
         for noise single-float = (octave-noise x y z octave seed)
         sum (/ noise (ash 1 octave)) into acc single-float
