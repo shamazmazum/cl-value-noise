@@ -6,8 +6,9 @@
   :licence "2-clause BSD"
   :pathname "src/"
   :serial t
-  :depends-on (:serapeum)
+  :depends-on (:serapeum :alexandria)
   :components ((:file "package")
+               (:file "constants")
                (:file "value-noise")))
 
 (defsystem :cl-value-noise/doc
